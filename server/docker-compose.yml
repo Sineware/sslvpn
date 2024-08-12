@@ -1,0 +1,45 @@
+# docker-compose.yml
+services:
+  httpd:
+    build:
+      context: ./httpd
+      dockerfile: Dockerfile
+  sshd:
+    build:
+      context: ./sshd
+      dockerfile: Dockerfile
+    environment:
+      SSLVPN_AUTHORIZED_KEYS: |-
+        SSH public keys goes here (newline separated)
+  sslh:
+    build:
+      context: ./sslh
+      dockerfile: Dockerfile
+    depends_on:
+      - sshd
+      - httpd
+  stunnel:
+    build:
+      context: ./stunnel
+      dockerfile: Dockerfile
+    depends_on:
+      - sslh
+      - sshd
+      - httpd
+    ports:
+      - "80:80"
+      - "443:443"
+
+  # sslvpn:
+  #   image: sineware/sslvpn
+  #   build: .
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   privileged: true
+  #   environment:
+  #     SSLVPN_AUTHORIZED_KEYS: |-
+  #       ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDONDXbHt+q9eE36IJbS39mF7yQ5cWTcv7jFhd2kHMjcBBN2y0cdHBzgGfd9jJiwQEBp9bkj/ubwpgwZadkC+0yKvpBOTsfV5cl9y950TmT6TRUu04ouThpGb6G/VzfUv92r06l2lqGxzuvy2grjmyjWt/6ZvFwx63LzLsDRillIGcpUiOzLPZyEp4jOlM59wfEgWF1qUZnMHjaz6G6m2cZKXft8OHxNY4gL2roCv8lfJO8kWRo4zHamLJHZIXFv+otckwhuPe+GbofBXTp97tq0ryex8x486FgEnMoJx4DZvigb+XZ0bgShkvNctyLoWdKXXt43/+vkzWbr6qHHCjd seshpenguin@PixlBookPro
+

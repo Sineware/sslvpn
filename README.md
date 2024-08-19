@@ -6,6 +6,8 @@ What this really means is that and SSH server is exposed through port 443, and e
 This is great because when combined with **sshuttle**, you can get a VPN-like service that will go through pretty much 
 any firewall, including ones that use Deep Packet Inspection (since the connection looks like a normal HTTPS connection).
 
+> Note that SSLVPN is not very performant. You should expect to see speeds around 1Mbps. Therefore, SSLVPN should only be used if other VPN technologies are unusable for your particular network situation.
+
 The VPN is built with the following services:
 * [stunnel4](https://www.stunnel.org/)
 * [sslh](https://github.com/yrutschle/sslh)
